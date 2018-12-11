@@ -1,4 +1,4 @@
-package progettoTpst;
+package progetto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,8 +8,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
-
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -30,12 +28,14 @@ public class InterfacciaLogin extends Application {
 	ListView<String> Risposta = new ListView<>();
 	TextField cUsername = new TextField();
 	PasswordField cPassword = new PasswordField();
-	
+	public static String User;
+
+
 	BufferedReader ricevuta;
 
 	@Override
 	public void start(Stage primaryStage) {
-		
+
 		Button pInvia = new Button("Invia");
 
 		GridPane gr = new GridPane();
@@ -64,43 +64,39 @@ public class InterfacciaLogin extends Application {
 
 	public void invia() {
 		Socket connessione;
-		String user = cUsername.getText();
-		String password = cPassword.getText();
+		User = cUsername.getText();
+		String Password = cPassword.getText();
 
 		try {
-			connessione = new Socket("192.168.1.31", 7813);
+			connessione = new Socket("192.168.1.82", 7813);
 			OutputStream uscitaByte;
 			uscitaByte = connessione.getOutputStream();
 			OutputStreamWriter uscita;
-			uscita = new OutputStreamWriter(uscitaByte,"UTF-8");
-			
-			uscita.write("R#"+user+"#"+password+"\n");
+			uscita = new OutputStreamWriter(uscitaByte, "UTF-8");
+			uscita.write("R#" + User + "#" + Password + "\n");
 			uscita.flush();
-			
 			InputStream entrataByte;
 			entrataByte = connessione.getInputStream();
 			InputStreamReader entrata;
-			entrata = new InputStreamReader(entrataByte,"UTF-8");
-	        BufferedReader bEntrata = new BufferedReader(entrata);
-	        String b = bEntrata.readLine();
-	        System.out.println(b+ "\n");
+			entrata = new InputStreamReader(entrataByte, "UTF-8");
+			BufferedReader bEntrata = new BufferedReader(entrata);
+			String b = bEntrata.readLine();
+			System.out.println(b + "\n");
 
-	     
-	        System.out.println("Credenziali inviate");
-				
-				if(b.equals("L#Si")) {
-				ChatJava finestra = new ChatJava(bEntrata,uscita);
+		
+			System.out.println("Credenziali inviate");
+
+			if (b.equals("L#Si")) {
+				InterfacciaChat finestra = new InterfacciaChat(bEntrata, uscita);
 				finestra.show();
-				
-				
-				}else {
-					Alert errorAlert = new Alert(AlertType.ERROR);
-					errorAlert.setHeaderText("Login errato");
-					errorAlert.setContentText("Utente o password sbagliata");
-					errorAlert.showAndWait();
-				}
-		    
-			
+
+			} else {
+				Alert errorAlert = new Alert(AlertType.ERROR);
+				errorAlert.setHeaderText("Login errato");
+				errorAlert.setContentText("Utente o password sbagliata");
+				errorAlert.showAndWait();
+			}
+
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
