@@ -16,7 +16,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -25,7 +24,6 @@ import javafx.stage.Stage;
 public class InterfacciaLogin extends Application {
 	Label eUsername = new Label("Username:");
 	Label ePassword = new Label("Password:");
-	ListView<String> Risposta = new ListView<>();
 	TextField cUsername = new TextField();
 	PasswordField cPassword = new PasswordField();
 	public static String User;
@@ -42,7 +40,6 @@ public class InterfacciaLogin extends Application {
 
 		gr.add(eUsername, 0, 0);
 		gr.add(ePassword, 0, 1);
-		gr.add(Risposta, 0, 2, 2, 1);
 
 		gr.add(cUsername, 1, 0);
 		gr.add(cPassword, 1, 1);

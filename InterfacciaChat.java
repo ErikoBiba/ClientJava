@@ -4,18 +4,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.UnknownHostException;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class InterfacciaChat extends Stage {
-	ListView <String> chat = new ListView<>();
+	TextArea chat = new TextArea();
 	TextField messaggio = new TextField();
 	BufferedReader ingresso;
 	Writer uscita;
@@ -26,15 +28,18 @@ public class InterfacciaChat extends Stage {
 		
 		
 		Button Invia = new Button("Invia messaggio");
+		Button bChiudi= new Button ("Disconnetti Biba dal mondo");
 		
 		GridPane gr = new GridPane();
 		
 		gr.add(chat, 0, 0, 2, 1);
 		gr.add(messaggio, 0, 1);
 		gr.add(Invia, 1, 1);
+		gr.add(bChiudi, 1, 2);
 		
 		Invia.setOnAction(e->InviaMessaggio());
-
+		bChiudi.setOnAction(e-> DisconnettiBiba());
+		
 		gr.setPadding(new Insets(10, 10, 10, 10));
 		gr.setHgap(10);
 		gr.setVgap(10);
@@ -43,17 +48,19 @@ public class InterfacciaChat extends Stage {
 		this.setTitle("Chat");
 		this.setScene(scene);
 		
-		ThreadRicevitore ScriviLeggi  = new ThreadRicevitore(ingresso, chat);
-		ScriviLeggi.start();
+		ThreadRicevitore scriviLeggi  = new ThreadRicevitore(ingresso, chat);
+		scriviLeggi.start();
 	}
 	
 	public void InviaMessaggio() {
-		Date date2 = new Date(System.currentTimeMillis());
+		LocalDate data = LocalDate.now();
+		LocalTime ora =  LocalTime.now();
+	
 
 		
 		try {
 			
-			uscita.write("M#"+ InterfacciaLogin.User + ": " + "#"+ messaggio.getText() + "#" + date2+ "\n");
+			uscita.write("M#"+ InterfacciaLogin.User  + "#"+ messaggio.getText() + "#" + data+ "#" + ora+ "\n");
 
 			uscita.flush();
 			
@@ -65,4 +72,12 @@ public class InterfacciaChat extends Stage {
 		}
 		
 	}
+	 public void DisconnettiBiba() {
+		 Stage uscita=null;
+		 Platform.exit();
+		 System.exit(0);
+		 uscita.close();
+		 System.out.println("Biba chiuso");
+	 }
+	
 }
